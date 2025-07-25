@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* Import Google Fonts Inter dans _app.tsx ou via <link> dans layout.tsx */
+
+:root {
+  --color-bg-main: #FAF7F2;
+  --color-bg-accent: #F5EBDD;
+  --color-bg-separator: #ECE8E1;
+  --color-primary: #82A8DD;
+  --color-primary-hover: #6797D1;
+  --color-accent: #E4D4BC;
+  --color-alert: #F5C48D;
+  --color-success: #A6D6B4;
+  --color-error: #F5A9A9;
+  --color-warning: #FFF3CD;
+  --color-text-main: #222225;
+  --color-text-secondary: #86868C;
+  --radius-main: 8px;
+  --shadow-main: 0 2px 8px 0 rgba(34,34,37,0.04);
+  --font-main: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-main: #181A1B;
+    --color-bg-accent: #232526;
+    --color-bg-separator: #232526;
+    --color-primary: #82A8DD;
+    --color-primary-hover: #6797D1;
+    --color-accent: #2C2F31;
+    --color-alert: #F5C48D;
+    --color-success: #A6D6B4;
+    --color-error: #F5A9A9;
+    --color-warning: #FFF3CD;
+    --color-text-main: #FAF7F2;
+    --color-text-secondary: #B0B0B5;
+    --radius-main: 8px;
+    --shadow-main: 0 2px 8px 0 rgba(34,34,37,0.10);
+    --font-main: 'Inter', Arial, Helvetica, sans-serif;
+  }
+}
+
+body {
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: var(--font-main);
+}
