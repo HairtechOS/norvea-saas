@@ -1,0 +1,22 @@
+name: Fail Fast Conventions
+
+on:
+  pull_request:
+    paths:
+      - 'frontend/src/components/**'
+      - 'backend/src/routes/**'
+      - 'backend/tests/**'
+
+jobs:
+  fail-fast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci || npm install
+      - name: Run fail-fast check
+        run: node scripts/fail-fast-check.js 

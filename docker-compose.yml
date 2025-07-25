@@ -1,0 +1,73 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: norvea
+      POSTGRES_PASSWORD: norvea
+      POSTGRES_DB: norvea
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+
+  backend:
+    build: ./backend
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgres://norvea:norvea@postgres:5432/norvea
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecret
+      REFRESH_SECRET: refreshsecret
+      SENTRY_DSN: ''
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./backend:/app
+    command: npm run dev
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+      NEXT_PUBLIC_SENTRY_DSN: ''
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+    depends_on:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3001:3000'
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  pgdata:
+  grafana-data: 

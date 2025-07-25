@@ -1,0 +1,33 @@
+name: Backup PostgreSQL
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: norvea
+          POSTGRES_PASSWORD: norvea
+          POSTGRES_DB: norvea
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install AWS CLI
+        run: sudo apt-get update && sudo apt-get install -y awscli
+      - name: Run backup script
+        env:
+          PGUSER: norvea
+          PGPASSWORD: norvea
+          PGDATABASE: norvea
+          PGHOST: localhost
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: bash backend/scripts/backup_postgres.sh 

@@ -1,0 +1,19 @@
+name: Chromatic Visual Tests
+
+on:
+  pull_request:
+    paths:
+      - 'frontend/**'
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Chromatic
+        run: npx chromatic --project-token=chpt_4f21cdf1eba894b 
